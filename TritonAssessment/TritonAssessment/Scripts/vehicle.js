@@ -1,8 +1,8 @@
 ﻿
 $(document).ready(function () {
 
-    LoadGridDepositRatingData();
-    LoadCapitecCustomersData();
+    LoadVehicleData();
+    LoadWayBillsData();
 
     $('#VehiclesGrid').on('click', '.contentEdit', function (data, type, row) {
         event.preventDefault();
@@ -58,8 +58,8 @@ $(document).ready(function () {
         if (UpdateFlag === true) {
             $.ajax({
                 type: "POST",
-                url: "/Vehicles/UpdateCapitecCustomersData",
-                data: '{capitecCustomers:' + JSON.stringify(capitecCustomers) + '}',
+                url: "/Vehicles/InsertWayBillData",
+                data: '{wayBillData:' + JSON.stringify(wayBills) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json"
             });
@@ -67,42 +67,24 @@ $(document).ready(function () {
     });
 
     //Save on the paging
-    $('#DepositRatingThrottleGrid').on('page.dt', function () {
+    $('#VehiclesGrid').on('page.dt', function () {
 
-        var ThrottleData = [];
+        var VehicleData = [];
         var Id,
-            Description,
-            ProcessDep,
-            ProcessReqStatusId,
-            SuccessfulDepCount,
-            AllowableDepAccountPerDay,
-            ExceptionalRatingId,
-            TransAmountLimit,
-            CumulativeTransAmountLimitPerDay,
-            CumulativeTransBalRemainPerDay,
-            AlertLevel,
-            UpdateRating,
-            DefaultVal;
+            Name,
+            Type,
+            Branch;
         var UpdateFlag;
 
-        $("#DepositRatingThrottleGrid").find('tr').not(":first").each(function (data, type, row) {
+        $("#VehiclesGrid").find('tr').not(":first").each(function (data, type, row) {
             var $tds = $(this).find('td');
 
-            if ($.isNumeric($tds.eq(3).text().trim()) && $.isNumeric($tds.eq(4).text().trim()) && $.isNumeric($tds.eq(5).text().trim()) && $.isNumeric($tds.eq(6).text().trim()) && $.isNumeric($tds.eq(7).text().trim()) && $.isNumeric($tds.eq(8).text().trim()) && $.isNumeric($tds.eq(9).text().trim()) && $.isNumeric($tds.eq(10).text().trim())) {
-                ThrottleData.push({
+            if ($.isNumeric($tds.eq(1).text().trim()) && $.isNumeric($tds.eq(2).text().trim()) && $.isNumeric($tds.eq(3).text().trim())) {
+                VehicleData.push({
                     Id: $tds.eq(0).text().trim(),
-                    Description: $tds.eq(1).text().trim(),
-                    ProcessDep: $(this).find("#ProcessDep").val(),
-                    ProcessReqStatusId: $tds.eq(3).text().trim(),
-                    SuccessfulDepCount: $tds.eq(4).text().trim(),
-                    AllowableDepAccountPerDay: $tds.eq(5).text().trim(),
-                    ExceptionalRatingId: $tds.eq(6).text().trim(),
-                    TransAmountLimit: $tds.eq(7).text().trim(),
-                    CumulativeTransAmountLimitPerDay: $tds.eq(8).text().trim(),
-                    CumulativeTransBalRemainPerDay: $tds.eq(9).text().trim(),
-                    AlertLevel: $tds.eq(10).text().trim(),
-                    DefaultVal: $(this).find("#DefaultVal").val(),
-                    UpdateRating: $(this).find("#UpdateRating").val()
+                    Name: $tds.eq(1).text().trim(),
+                    Type: $tds.eq(2).text().trim(),
+                    Branch: $tds.eq(3).text().trim()
                 });
                 UpdateFlag = true;
             }
@@ -122,7 +104,7 @@ $(document).ready(function () {
         if (UpdateFlag === true) {
             $.ajax({
                 type: "POST",
-                url: "/ThrottleManagement/UpdateDepositRatingThrottleData",
+                url: "/Vehicles/UpdateVehicleData",
                 data: '{ThrottleData:' + JSON.stringify(ThrottleData) + '}',
                 contentType: "application/json; charset=utf-8",
                 dataType: "json"
@@ -132,11 +114,11 @@ $(document).ready(function () {
     });
 });
 
-function LoadCapitecCustomersData() {
+function LoadVehicleData() {
 
-    $("#CapitecCustomersGrid").DataTable({
+    $("#VehiclesGrid").DataTable({
         "ajax": {
-            "url": "/ThrottleManagement/GetCapitecCustomersData",
+            "url": "/Vehicles/Vehicles",
             "type": "POST",
             "datatype": "json"
         },
@@ -148,42 +130,35 @@ function LoadCapitecCustomersData() {
                     "data": "id"
                 },
                 {
-                    "data": "UserReference",
+                    "data": "Name",
                     "render": function (data, type, row) {
-                        return '<div class="contentEdit"> ' + row.UserReference + '</div>';
+                        return '<div class="contentEdit"> ' + row.Name + '</div>';
                     }
 
                 },
                 {
-                    "data": "RatingId",
+                    "data": "Type",
                     "render": function (data, type, row) {
-                        return '<div class="contentEdit"> ' + row.RatingId + '</div>';
+                        return '<div class="contentEdit"> ' + row.Type + '</div>';
                     }
 
                 },
                 {
-                    "data": "VerifiedDepositCount",
+                    "data": "Branch",
                     "render": function (data, type, row) {
-                        return '<div class="contentEdit"> ' + row.VerifiedDepositCount + '</div>';
-                    }
-                },
-                {
-                    "data": "DailyDepositCount",
-                    "render": function (data, type, row) {
-                        return '<div class="contentEdit"> ' + row.DailyDepositCount + '</div>';
+                        return '<div class="contentEdit"> ' + row.Branch + '</div>';
                     }
                 }
-
             ]
 
     });
 }
 
-function LoadGridDepositRatingData() {
+function LoadWayBillsData() {
 
-    $("#DepositRatingThrottleGrid").DataTable({
+    $("#WayBillsGrid").DataTable({
         "ajax": {
-            "url": "/ThrottleManagement/GetDepositRatingThrottleData",
+            "url": "/WayBills/WayBills",
             "type": "POST",
             "datatype": "json"
         },
@@ -195,99 +170,31 @@ function LoadGridDepositRatingData() {
                     "data": "Id"
                 },
                 {
-                    "data": "Description",
+                    "data": "Weight",
                     "render": function (data, type, row) {
-                        return '<div class="contentEdit"> ' + row.Description
+                        return '<div class="contentEdit"> ' + row.Weight
                             + '</div>';
                     }
 
                 },
                 {
-                    "data": "ProcessDep",
-                    "render": function (data, type, row) {
-                        //return '<div class="contentEdit"> ' + row.ProcessDep + '</div>';
-                        if (row.ProcessDep === true) {
-                            return '<select id=ProcessDep>< option value = "' + true + '" > ' + true + '</option ><option value = "' + true + '"> ' + true + '</option ><option value = "' + false + '"> ' + false + '</option > </select >';
-                        }
-                        else {
-                            return '<select id=ProcessDep>< option value = "' + false + '" > ' + false + '</option ><option value = "' + false + '"> ' + false + '</option ><option value = "' + true + '"> ' + true + '</option > </select >';
+                    "data": "NoOfParcels",
+                    //"render": function (data, type, row) {
+                    //    //return '<div class="contentEdit"> ' + row.ProcessDep + '</div>';
+                    //    if (row.ProcessDep === true) {
+                    //        return '<select id=ProcessDep>< option value = "' + true + '" > ' + true + '</option ><option value = "' + true + '"> ' + true + '</option ><option value = "' + false + '"> ' + false + '</option > </select >';
+                    //    }
+                    //    else {
+                    //        return '<select id=ProcessDep>< option value = "' + false + '" > ' + false + '</option ><option value = "' + false + '"> ' + false + '</option ><option value = "' + true + '"> ' + true + '</option > </select >';
 
-                        }
-                    }
-
-                },
-                {
-                    "data": "ProcessReqStatusId",
-                    "render": function (data, type, row) {
-                        return '<div class="contentEdit"> ' + row.ProcessReqStatusId + '</div>';
-                    }
-                },
-                {
-                    "data": "SuccessfulDepCount",
-                    "render": function (data, type, row) {
-                        return '<div class="contentEdit"> ' + row.SuccessfulDepCount + '</div>';
-                    }
+                    //    }
+                    //}
 
                 },
                 {
-                    "data": "AllowableDepAccountPerDay",
+                    "data": "VehicleId",
                     "render": function (data, type, row) {
-                        return '<div class="contentEdit"> ' + row.AllowableDepAccountPerDay + '</div>';
-                    }
-
-                },
-                {
-                    "data": "ExceptionalRatingId",
-                    "render": function (data, type, row) {
-                        return '<div class="contentEdit"> ' + row.ExceptionalRatingId + '</div>';
-                    }
-                },
-                {
-                    "data": "TransAmountLimit",
-                    "render": function (data, type, row) {
-                        return '<div class="contentEdit"> ' + row.TransAmountLimit + '</div>';
-                    }
-                },
-                {
-                    "data": "CumulativeTransAmountLimitPerDay",
-                    "render": function (data, type, row) {
-                        return '<div class="contentEdit"> ' + row.CumulativeTransAmountLimitPerDay + '</div>';
-                    }
-                },
-                {
-                    "data": "CumulativeTransBalRemainPerDay",
-                    "render": function (data, type, row) {
-                        return '<div class="contentEdit"> ' + row.CumulativeTransBalRemainPerDay + '</div>';
-                    }
-                },
-                {
-                    "data": "AlertLevel",
-                    "render": function (data, type, row) {
-                        return '<div class="contentEdit"> ' + row.AlertLevel + '</div>';
-                    }
-                },
-                {
-                    "data": "DefaultVal",
-                    "render": function (data, type, row) {
-                        if (row.DefaultVal === true) {
-                            return '<select id=DefaultVal>< option value = "' + true + '" > ' + true + '</option ><option value = "' + true + '"> ' + true + '</option ><option value = "' + false + '"> ' + false + '</option > </select >';
-                        }
-                        else {
-                            return '<select id=DefaultVal>< option value = "' + false + '" > ' + false + '</option ><option value = "' + false + '"> ' + false + '</option ><option value = "' + true + '"> ' + true + '</option > </select >';
-
-                        }
-                    }
-                },
-                {
-                    "data": "UpdateRating",
-                    "render": function (data, type, row) {
-                        if (row.UpdateRating === true) {
-                            return '<select id=UpdateRating>< option value = "' + true + '" > ' + true + '</option ><option value = "' + true + '"> ' + true + '</option ><option value = "' + false + '"> ' + false + '</option > </select >';
-                        }
-                        else {
-                            return '<select id=UpdateRating>< option value = "' + false + '" > ' + false + '</option ><option value = "' + false + '"> ' + false + '</option ><option value = "' + true + '"> ' + true + '</option > </select >';
-
-                        }
+                        return '<div class="contentEdit"> ' + row.VehicleId + '</div>';
                     }
                 }
             ]
@@ -295,27 +202,26 @@ function LoadGridDepositRatingData() {
     });
 }
 
-function SaveCapitecCustomerData() {
+function SaveVehicleData() {
 
-    var capitecCustomers = [];
-    var UserReference,
-        RatingId,
-        VerifiedDepositCount,
-        DailyDepositCount;
+    var VehicleData = [];
+    var Id,
+        Name,
+        Type,
+        Branch;
     var UpdateFlag;
 
-    $("#CapitecCustomersGrid").find('tr').not(":first").each(function (data, type, row) {
+    $("#VehiclesGrid").find('tr').not(":first").each(function (data, type, row) {
 
         var $tds = $(this).find('td');
 
-        if ($.isNumeric($tds.eq(2).text().trim()) && $.isNumeric($tds.eq(3).text().trim()) && $.isNumeric($tds.eq(4).text().trim())) {
+        if ($.isNumeric($tds.eq(1).text().trim()) && $.isNumeric($tds.eq(2).text().trim()) && $.isNumeric($tds.eq(3).text().trim())) {
 
-            capitecCustomers.push({
+            VehicleData.push({
                 id: $tds.eq(0).text().trim(),
-                UserReference: $tds.eq(1).text().trim(),
-                RatingId: $tds.eq(2).text().trim(),
-                VerifiedDepositCount: $tds.eq(3).text().trim(),
-                DailyDepositCount: $tds.eq(4).text().trim()
+                Name: $tds.eq(1).text().trim(),
+                Type: $tds.eq(2).text().trim(),
+                Branch: $tds.eq(3).text().trim()
 
             });
             UpdateFlag = true;
@@ -334,8 +240,8 @@ function SaveCapitecCustomerData() {
     if (UpdateFlag === true) {
         $.ajax({
             type: "POST",
-            url: "/ThrottleManagement/UpdateCapitecCustomersData",
-            data: '{capitecCustomers:' + JSON.stringify(capitecCustomers) + '}',
+            url: "/Vehicles/UpdateVehicleData",
+            data: '{VehicleData:' + JSON.stringify(VehicleData) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function (data) {
@@ -346,7 +252,7 @@ function SaveCapitecCustomerData() {
                         type: 'danger',
                         position: 'top-center'
                     });
-                    $("#CapitecCustomersGrid").DataTable().ajax.reload(null, false);
+                    $("#VehiclesGrid").DataTable().ajax.reload(null, false);
                 }
                 if (data.SuccessData === true) {
                     bootoast.toast({
@@ -365,17 +271,17 @@ function SaveCapitecCustomerData() {
                     position: 'top-center'
                 });
 
-                $("#CapitecCustomersGrid").DataTable().ajax.reload(null, false);
+                $("#VehiclesGrid").DataTable().ajax.reload(null, false);
             }
 
         });
 
     }
 
-    $("#CapitecCustomersGrid").DataTable().ajax.reload(null, false);
+    $("#VehiclesGrid").DataTable().ajax.reload(null, false);
 }
 
-function SaveDepositRatingThrottleData() {
+function SaveWayBillData() {
     var ThrottleData = [];
     var Id,
         Description,
@@ -429,7 +335,7 @@ function SaveDepositRatingThrottleData() {
     if (UpdateFlag === true) {
         $.ajax({
             type: "POST",
-            url: "/ThrottleManagement/UpdateDepositRatingThrottleData",
+            url: "/Vehicles/InsertWayBillData",
             data: '{ThrottleData:' + JSON.stringify(ThrottleData) + '}',
             contentType: "application/json; charset=utf-8",
             dataType: "json",

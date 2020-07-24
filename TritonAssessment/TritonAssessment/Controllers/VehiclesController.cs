@@ -75,7 +75,7 @@ namespace TritonAssessment.Controllers
 
 
         [HttpPost]
-        public JsonResult UpdateWayBillData(List<WayBills> wayBillData)
+        public JsonResult InsertWayBillData(List<WayBills> wayBillData)
         {
             TritonDataCalls _TritonData = new TritonDataCalls();
 
