@@ -11,7 +11,7 @@ namespace TritonAssessment.Controllers
     {
         // GET: Vehicles
 
-        [HttpPost]
+        [HttpGet]
         public ActionResult Vehicles()
         {
             TritonDataCalls _TritonData = new TritonDataCalls();
@@ -26,7 +26,7 @@ namespace TritonAssessment.Controllers
         }
 
 
-        [HttpPost]
+        [HttpGet]
         public ActionResult WayBills()
         {
             TritonDataCalls _TritonData = new TritonDataCalls();

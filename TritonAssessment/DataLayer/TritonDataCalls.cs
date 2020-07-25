@@ -12,7 +12,7 @@ namespace DataLayer
     public class TritonDataCalls
     {
 
-        private string TritonDb = ConfigurationManager.ConnectionStrings["TritonDb"].ConnectionString;
+        private string TritonDb = ConfigurationManager.ConnectionStrings["TritonDB"].ConnectionString;
 
         public IEnumerable<Vehicle> ReadAllVehicleList()
         {
