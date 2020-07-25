@@ -282,46 +282,30 @@ function SaveVehicleData() {
 }
 
 function SaveWayBillData() {
-    var ThrottleData = [];
-    var Id,
-        Description,
-        ProcessDep,
-        ProcessReqStatusId,
-        SuccessfulDepCount,
-        AllowableDepAccountPerDay,
-        ExceptionalRatingId,
-        TransAmountLimit,
-        CumulativeTransAmountLimitPerDay,
-        CumulativeTransBalRemainPerDay,
-        AlertLevel,
-        UpdateRating,
-        DefaultVal;
+    var wayBills = [];
+    var Weight,
+        NoOfParcels,
+        VehicleId;
+
     var UpdateFlag;
 
-    $("#DepositRatingThrottleGrid").find('tr').not(":first").each(function (data, type, row) {
+    $("#WayBillsGrid").find('tr').not(":first").each(function (data, type, row) {
         var $tds = $(this).find('td');
 
-        if ($.isNumeric($tds.eq(3).text().trim()) && $.isNumeric($tds.eq(4).text().trim()) && $.isNumeric($tds.eq(5).text().trim()) && $.isNumeric($tds.eq(6).text().trim()) && $.isNumeric($tds.eq(7).text().trim()) && $.isNumeric($tds.eq(8).text().trim()) && $.isNumeric($tds.eq(9).text().trim()) && $.isNumeric($tds.eq(10).text().trim())) {
-            ThrottleData.push({
-                Id: $tds.eq(0).text().trim(),
-                Description: $tds.eq(1).text().trim(),
-                ProcessDep: $(this).find("#ProcessDep").val(),
-                ProcessReqStatusId: $tds.eq(3).text().trim(),
-                SuccessfulDepCount: $tds.eq(4).text().trim(),
-                AllowableDepAccountPerDay: $tds.eq(5).text().trim(),
-                ExceptionalRatingId: $tds.eq(6).text().trim(),
-                TransAmountLimit: $tds.eq(7).text().trim(),
-                CumulativeTransAmountLimitPerDay: $tds.eq(8).text().trim(),
-                CumulativeTransBalRemainPerDay: $tds.eq(9).text().trim(),
-                AlertLevel: $tds.eq(10).text().trim(),
-                DefaultVal: $(this).find("#DefaultVal").val(),
-                UpdateRating: $(this).find("#UpdateRating").val()
+        if ($.isNumeric($tds.eq(2).text().trim()) && $.isNumeric($tds.eq(3).text().trim()) && $.isNumeric($tds.eq(4).text().trim())) {
+
+            wayBills.push({
+                id: $tds.eq(0).text().trim(),
+                Weight: $tds.eq(1).text().trim(),
+                NoOfParcels: $tds.eq(2).text().trim(),
+                VehicleId: $tds.eq(3).text().trim(),
+
             });
             UpdateFlag = true;
         }
         else {
             bootoast.toast({
-                message: 'Error Updating data, Invalid Data!',
+                message: 'Invalid Data, Please Correct!',
                 type: 'danger',
                 position: 'top-center'
             });
