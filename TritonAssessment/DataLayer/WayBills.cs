@@ -14,6 +14,8 @@ namespace DataLayer
 
         public int NoOfParcels { get; set; }
 
+        public int VehicleId { get; set; }
+
         public Vehicle vehicle { get; set; }
     }
 }

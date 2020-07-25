@@ -55,9 +55,9 @@ namespace DataLayer
                 {
                     WayBills waybills = new WayBills();
                     waybills.Id = Convert.ToInt32((rdr["Id"] as int?).GetValueOrDefault());
-                    waybills.weight = Convert.ToDecimal((rdr["weight"] as decimal?).GetValueOrDefault());
+                    waybills.weight = Convert.ToDecimal((rdr["TotalWeight"] as decimal?).GetValueOrDefault());
                     waybills.NoOfParcels = Convert.ToInt32((rdr["NoOfParcels"] as int?).GetValueOrDefault());
-                    waybills.vehicle.Id = Convert.ToInt32((rdr["VehicleId"] as int?).GetValueOrDefault());
+                    waybills.VehicleId = Convert.ToInt32((rdr["VehicleId"] as int?).GetValueOrDefault());
 
                     listWayBills.Add(waybills);
                 }
